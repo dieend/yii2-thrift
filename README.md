@@ -30,7 +30,32 @@ or add
 - Yii 2.0.0
 
 # Usage
+There are 2 possible way to uses this repository.
 
+## Usage 1
+This is the preferred way. It will seamlessly integrated with your existing web application
+and only need to add one endpoint. But it requires you to uses http(s) transport and multiplexed
+protocol. For using default transport, see Usage 2.
+
+### Using server:
+Create thrift processor, by creating a new class that extends `ThriftHandler` and implementing
+generated interface from thrift metadata. This handler class extended from `\yii\web\Controller`,
+so you can add `beforeAction`, `behaviors`, etc. `handleException` will catch normal exception,
+and you should wrap this exception into exception that defined in your thrift metadata, and throw
+it again so `Thrift` understood the exception and can return it to your client.
+
+Create an endpoint controller, e.g. `ServicesController` which extends abstract class
+`ThriftController`. All client will uses `{http://your.domain}/services` to access the thrift server.
+`getHandlerClasses` should return array that point multiplex key to it's handler.
+
+
+// TODO create code example
+
+### Using client:
+```
+```
+
+## Usage 2
 Put the thrift file into some directory `thrift` in the root is preferable.
 
 Generate the thrift file using command below.

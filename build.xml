@@ -1,0 +1,11 @@
+<project name="yii2-thrift" default="test" basedir=".">
+    <target name="test">
+        <echo>no test available yet</echo>
+    </target>
+    <target name="phpcs">
+        <exec executable="${basedir}/vendor/bin/phpcs" failonerror="true">
+            <arg value="--standard=${basedir}/ruleset.xml"/>
+            <arg value="src"/>
+        </exec>
+    </target>
+</project>
