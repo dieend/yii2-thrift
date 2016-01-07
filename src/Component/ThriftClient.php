@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (C) PT. Teknologi Kreasi Anak Bangsa (UrbanIndo.com) - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
@@ -21,24 +20,80 @@ use yii\base\Component;
  *
  * @author adinata
  */
-class ThriftClient extends Component {
+class ThriftClient extends Component
+{
+    /**
+     * Server host.
+     * @var string
+     */
     public $host;
+
+    /**
+     * Server port.
+     * @var string
+     */
     public $port;
+
+    /**
+     * Server path.
+     * @var string.
+     */
     public $path;
+
+    /**
+     * Http or Https.
+     * @var string
+     */
     public $scheme;
+
+    /**
+     * Multiplex key for service name.
+     * @var string
+     */
     public $serviceName;
+
+    /**
+     * Service Client class.
+     * @var string
+     */
     public $serviceClass;
+
+    /**
+     * Created multiplex protocol.
+     * @var TMultiplexedProtocol
+     */
     private $_protocol;
+
+    /**
+     * Service client.
+     * @var service interface
+     */
     private $_client;
+
+    /**
+     * [$_socket description]
+     * @var [type]
+     */
     private $_socket;
-    public function init() {
+
+    /**
+     * Init component
+     * @return void
+     */
+    public function init()
+    {
         parent::init();
-        $this->_socket= new THttpClient($this->host, $this->port, $this->path, $this->scheme);
+        $this->_socket = new THttpClient($this->host, $this->port, $this->path, $this->scheme);
         $transport = new TBufferedTransport($this->_socket, 1024, 1024);
         $this->_protocol = new TMultiplexedProtocol(new TBinaryProtocol($transport), $this->serviceName);
-        
+
     }
-    public function getClient() {
+    /**
+     * Get service client.
+     * @return mixed
+     */
+    public function getClient()
+    {
         if ($this->_client == null) {
             $transport = $this->_protocol->getTransport();
             $transport->open();
@@ -50,12 +105,14 @@ class ThriftClient extends Component {
         }
         return $this->_client;
     }
+
     /**
-     * 
-     * @return THttpClient
+     * Add header for http client.
+     * @param mixed $headers Header to be added.
+     * @return void
      */
-    public function addHeaders($headers) {
+    public function addHeaders($headers)
+    {
         $this->_socket->addHeaders($headers);
     }
 }
-

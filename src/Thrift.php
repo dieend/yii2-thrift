@@ -1,4 +1,7 @@
 <?php
+/**
+ *
+ */
 
 namespace UrbanIndo\Yii2\Thrift;
 
@@ -8,7 +11,8 @@ use Thrift\ClassLoader\ThriftClassLoader;
  * Thrift is the component class of
  * @author Petra Barus <petra.barus@gmail.com>
  */
-class Thrift extends \yii\base\Component {
+class Thrift extends \yii\base\Component
+{
 
     /**
      * The path of the thrift generated files.
@@ -19,7 +23,7 @@ class Thrift extends \yii\base\Component {
     /**
      * The list of namespace definitions and the related relative path from the thrift
      * generated file directory.
-     * 
+     *
      * The format is like this
      * ```
      * [
@@ -32,19 +36,19 @@ class Thrift extends \yii\base\Component {
     
     /**
      * The service map between URL path and service handler.
-     * 
+     *
      * The format is like this
-     * 
+     *
      * ```
      * [
      *    'route' => 'hello'
      * ]
      * ```
-     * 
+     *
      * The hello will be resolve to HelloService located in the `$serviceNamespace`.
-     * 
+     *
      * or it can also be
-     * 
+     *
      * ```
      * [
      *    'route' => [
@@ -52,7 +56,7 @@ class Thrift extends \yii\base\Component {
      *    ]
      * ]
      * ```
-     * 
+     *
      * @var array
      */
     public $serviceMap = [];
@@ -65,9 +69,11 @@ class Thrift extends \yii\base\Component {
     
     /**
      * Initialize the component.
-     * @throws \yii\base\InvalidConfigException if the name definition or service map is empty.
+     * @throws \yii\base\InvalidConfigException If the name definition or service map is empty.
+     * @return  void
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
         if (empty($this->path)) {
             $this->path = \Yii::$app->getBasePath() . DIRECTORY_SEPARATOR . 'gen-php';
@@ -83,10 +89,12 @@ class Thrift extends \yii\base\Component {
     
     /**
      * Register alias load.
+     * @return void
      */
-    private function register() {
+    private function register()
+    {
         $loader = new ThriftClassLoader();
-        foreach($this->definitions as $alias => $path) {
+        foreach ($this->definitions as $alias => $path) {
             $loader->registerDefinition($alias, $this->path . $path);
         }
         $loader->register();
@@ -94,9 +102,12 @@ class Thrift extends \yii\base\Component {
     
     /**
      * Resolve the service.
-     * @param \UrbanIndo\Yii2\Thrift\Request $request
+     * @param \UrbanIndo\Yii2\Thrift\Request $request Request.
+     * @return object
+     * @throws \yii\base\InvalidCallException Service not foind.
      */
-    public function resolveService(Request $request) {
+    public function resolveService(Request $request)
+    {
         $pathInfo = $request->getPathInfo();
         $service = \yii\helpers\ArrayHelper::getValue($this->serviceMap, $pathInfo);
         if ($service == null) {
@@ -105,7 +116,7 @@ class Thrift extends \yii\base\Component {
         if (is_string($service)) {
             $class = $this->serviceNamespace . '\\' . \yii\helpers\Inflector::id2camel($service) . 'Service';
             $handler = new $class;
-        } else if (is_array($service)){
+        } else if (is_array($service)) {
             $handler = \Yii::createObject($service);
         }
         /* @var $handler Service */

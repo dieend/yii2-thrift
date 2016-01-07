@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (C) PT. Teknologi Kreasi Anak Bangsa (UrbanIndo.com) - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
@@ -13,13 +12,26 @@ namespace UrbanIndo\Yii2\Thrift\Component;
  *
  * @author adinata
  */
-
-class ThriftProcessor extends \yii\base\Component{
+class ThriftProcessor extends \yii\base\Component
+{
+    /**
+     * Handlers for this processor.
+     * @var array
+     */
     public $handlers = [];
-    
+
+    /**
+     * Processor
+     * @var \Thrift\TMultiplexedProcessor
+     */
     private $_processor;
 
-    public function init() {
+    /**
+     * Initialize component
+     * @return void
+     */
+    public function init()
+    {
         $this->_processor = new \Thrift\TMultiplexedProcessor();
         /* @var $handler ThriftProcessorHandler */
         foreach ($this->handlers as $handler) {
@@ -29,12 +41,19 @@ class ThriftProcessor extends \yii\base\Component{
             ]);
             $processorClass = $handler->getProcessorClass();
             $processor = new $processorClass($proxy);
-            $this->_processor->registerProcessor($handler->getProcessorName(),
-                    $processor);
+            $this->_processor->registerProcessor(
+                $handler->getProcessorName(),
+                $processor
+            );
         }
     }
 
-    public function run() {
+    /**
+     * Run processor.
+     * @return [type] [description]
+     */
+    public function run()
+    {
         $request = \Yii::$app->getRequest();
         $response = \Yii::$app->getResponse();
         $response->format = ThriftResponse::FORMAT_THRIFT;
@@ -43,5 +62,4 @@ class ThriftProcessor extends \yii\base\Component{
         $this->_processor->process($protocol, $protocol);
         return $transport->getBuffer();
     }
-
 }

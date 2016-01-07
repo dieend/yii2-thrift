@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (C) PT. Teknologi Kreasi Anak Bangsa (UrbanIndo.com) - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
@@ -13,18 +12,32 @@ namespace UrbanIndo\Yii2\Thrift\Component;
  *
  * @author adinata
  */
+abstract class ThriftController extends \yii\base\Controller
+{
+    /**
+     * Get multiplex mapping key with actual handler.
+     * @return array
+     */
+    abstract protected function getHandlerClasses();
 
-abstract class ThriftController extends \yii\base\Controller {
-    protected abstract function getHandlerClasses();
+    /**
+     * [$_thriftProxy description]
+     * @var [type]
+     */
     private $_thriftProxy;
-    
-    public function init() {
+
+    /**
+     * Initialize component.
+     * @return void
+     */
+    public function init()
+    {
         parent::init();
         $handlers = [];
         foreach ($this->getHandlerClasses() as $name => $class) {
             $handlers[] = \Yii::createObject(['class' => $class], [$name, $this]);
         }
-        
+
         $this->_thriftProxy = \Yii::createObject(
             [
                 'class' => \common\components\thrift\ThriftProcessor::class,
@@ -33,7 +46,16 @@ abstract class ThriftController extends \yii\base\Controller {
         );
     }
 
-    public function runAction($id, $params = array()) {
+    /**
+     * Execute action.
+     * @param  string $id     Action id.
+     * @param  array  $params Action parameters.
+     * @return mixed
+     */
+    public function runAction($id, $params = array())
+    {
+        $id; // unused
+        $params; // unused
         return $this->_thriftProxy->run();
     }
 }

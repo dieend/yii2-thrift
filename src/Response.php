@@ -1,4 +1,7 @@
 <?php
+/**
+ *
+ */
 
 namespace UrbanIndo\Yii2\Thrift;
 
@@ -7,13 +10,17 @@ use Thrift\Transport\TPhpStream;
 use Thrift\Protocol\TBinaryProtocol;
 
 /**
- * Response 
+ * Response
  * @author Petra Barus <petra.barus@gmail.com>
  */
-class Response extends \yii\web\Response {
+class Response extends \yii\web\Response
+{
     
     const FORMAT_THRIFT = 'thrift';
-    
+    /**
+     * Default format thrift
+     * @var string
+     */
     public $format = self::FORMAT_THRIFT;
     
     /**
@@ -35,8 +42,10 @@ class Response extends \yii\web\Response {
     
     /**
      * Initialize the response.
+     * @return void
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->formatters = [
             self::FORMAT_THRIFT => 'UrbanIndo\Yii2\Thrift\ResponseFormatter',
@@ -46,16 +55,20 @@ class Response extends \yii\web\Response {
     }
     
     /**
-     * @param object $processor
+     * @param object $processor Processor.
+     * @return void
      */
-    public function setProcessor($processor) {
+    public function setProcessor($processor)
+    {
         $this->_processor = $processor;
     }
     
     /**
      * Send the result.
+     * @return  void
      */
-    public function send() {
+    public function send()
+    {
         //PS: I think this is a bit wrong. But this works, for now.
         $this->_transport->open();
         $this->_processor->process($this->_protocol, $this->_protocol);

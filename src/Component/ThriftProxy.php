@@ -52,7 +52,7 @@ class ThriftProxy extends Component
             }
         }
     }
-    
+
     /**
      * Cloned from \yii\base\Controller::runAction.
      * It was because runAction use $id and $route as parameter instead of action object
@@ -70,10 +70,10 @@ class ThriftProxy extends Component
 
         $oldAction = $controller->action ;
         $controller->action = $action;
-        
+
         $modules = [];
         $runAction = true;
-        
+
         // call beforeAction on modules
         foreach ($controller->getModules() as $module) {
             if ($module->beforeAction($action)) {
@@ -90,7 +90,7 @@ class ThriftProxy extends Component
             // run the action
             $result = $action->runWithParams([]);
             $result = $controller->afterAction($action, $result);
-            
+
             // call afterAction on modules
             foreach ($modules as $module) {
                 /* @var $module Module */
@@ -102,7 +102,7 @@ class ThriftProxy extends Component
 
         return $result;
     }
-    
+
     /**
      * Wrap service into InlineAction.
      * @param string $methodName Service method name.
