@@ -49,7 +49,8 @@ abstract class ThriftHandler extends \yii\web\Controller implements ThriftHandle
     public function getProcessorName()
     {
         if (!isset($this->_processorName)) {
-            $candidate = end(explode('\\', $this->getProcessorClass()));
+            $tmp = explode('\\', $this->getProcessorClass());
+            $candidate = end($tmp);
             $len = strlen($candidate);
             if (substr($candidate, $len - 9, 9) !== 'Processor') {  // 9 is length of 'Processor' word
                 throw new \Exception('Invalid Processor class name');
