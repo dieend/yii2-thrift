@@ -30,7 +30,7 @@ class ThriftResponse extends \yii\web\Response
     {
         return array_merge(
             [
-                self::FORMAT_THRIFT => \common\components\thrift\ThriftFormatter::class,
+                self::FORMAT_THRIFT => ThriftFormatter::class,
             ],
             parent::defaultFormatters()
         );

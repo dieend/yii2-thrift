@@ -40,7 +40,7 @@ abstract class ThriftController extends \yii\base\Controller
 
         $this->_thriftProxy = \Yii::createObject(
             [
-                'class' => \common\components\thrift\ThriftProcessor::class,
+                'class' => ThriftProcessor::class,
                 'handlers' => $handlers,
             ]
         );
